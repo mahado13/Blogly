@@ -1,0 +1,23 @@
+{%extends 'base.html' %}
+
+{% block title %} All Users List {% endblock %}
+
+{% block content %}
+
+<h1>All Users:</h1>
+    <!-- <img src="https://images.unsplash.com/photo-1511376777868-611b54f68947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="code pic"> -->
+    <ul>
+        {% for user in all_users %}
+        <li><a href="/users/{{user.id}}">{{user.first_name}} {{user.last_name}} </a></li>
+        {% endfor %}
+    </ul>
+
+   <form action="/users/new">
+   <button> Add User</button>
+   </form>
+
+   {% for msg in get_flashed_messages() %}
+        <p>{{ msg }}</p>
+   {% endfor %}
+
+{% endblock %}
