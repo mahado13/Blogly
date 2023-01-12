@@ -2,8 +2,8 @@
 
 """
 Author: Mahad Osman
-Date: Jan 8th 2023
-Assignment Blogly part 1
+Date: Jan 11th 2023
+Assignment Blogly part 2
 """
 
 from crypt import methods
@@ -11,7 +11,7 @@ from operator import methodcaller
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy 
-from models import db, connect_db, Users
+from models import db, connect_db, Users, Posts
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -32,6 +32,7 @@ connect_db(app)
 
 @app.route('/')
 def show_users():
+    """The root path which will list all users"""
     all_users = Users.query.all()
     # print('*********************')
     # print(all_users)
@@ -41,11 +42,13 @@ def show_users():
 
 @app.route('/users/new')
 def new_user_form():
+    """Returns a form to create a new user"""
     return render_template('new_userform.html')
 
 
 @app.route('/users/new', methods=["POST"])
 def add_new_user():
+    """Submits the new user to the database"""
     first_name = request.form["first_name"]
     last_name = request.form["last_name"]
     image_url = request.form["image_url"]
@@ -59,18 +62,23 @@ def add_new_user():
 
 @app.route('/users/<int:user_id>')
 def user_profile(user_id):
+    """Creates the users unique profile"""
     user = Users.query.get_or_404(user_id)
-    return render_template('user_profile.html', user = user)
+    #posts = Posts.query.get(user_id)
+    posts = Posts.query.filter_by(user_id = user_id).all()
+    return render_template('user_profile.html', user = user, posts = posts)
 
 
 @app.route('/users/<int:user_id>/edit')
 def edit_user_profile(user_id):
+    """The edit form for a user's profile"""
     user = Users.query.get_or_404(user_id)
     return render_template('edit_user.html', user= user)
 
 
 @app.route('/users/<int:user_id>/edit', methods=["POST"])
 def submit_edit(user_id):
+    """Handles submitting the edit change to our db"""
     user = Users.query.get(user_id)
     user.first_name = request.form["first_name"]
     user.last_name = request.form["last_name"]
@@ -84,10 +92,67 @@ def submit_edit(user_id):
 
 @app.route('/users/<int:user_id>/delete', methods=["POST"])
 def delete_user(user_id):
+    """Deletes a user from the database and page."""
     Users.query.filter_by(id = user_id).delete()
     db.session.commit()
     flash(f"Users {user_id} was deleted")
     return redirect (f'/')
 
 
+"""Post routes"""
+@app.route('/users/<int:user_id>/posts/new')
+def new_post_form(user_id):
+    """New post form"""
+    user = Users.query.get_or_404(user_id)
+    return render_template('new_post.html', user = user)
 
+
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def add_new_post(user_id):
+    """Handles the submisson of a new post to our db"""
+    user = Users.query.get_or_404(user_id)
+    title = request.form["title"]
+    content = request.form["content"]
+    
+    p = Posts(title =title, content =content, user_id=user.id)
+    db.session.add(p)
+    db.session.commit()
+    return redirect(f"/users/{user_id}")
+
+
+@app.route('/posts/<int:post_id>')
+def post_view(post_id):
+    """The post view which a user can click to edit or delete"""
+    post = Posts.query.get_or_404(post_id)
+    return render_template("post_view.html", post = post)
+
+@app.route('/posts/<int:post_id>/edit')
+def edit_view(post_id):
+    """Populates an edit form for the selected post"""
+    post = Posts.query.get_or_404(post_id)
+    return render_template("edit_post.html", post = post)
+
+
+@app.route('/posts/<int:post_id>/edit', methods=["POST"])
+def edit_post(post_id):
+    """Handles the submission of an edit for a post"""
+    post = Posts.query.get_or_404(post_id)
+    post.title = request.form["title"]
+    post.content = request.form['content']
+    db.session.add(post)
+    db.session.commit()
+    return redirect (f"/users/{post.user.id}")
+
+
+
+
+@app.route('/posts/<int:post_id>/delete', methods=["POST"])
+def delete_post(post_id):
+    """Handles the deletion of a users post in our db and front end."""
+    post = Posts.query.get_or_404(post_id)
+    print("******************************")
+    print(post.user.id)
+    print("******************************")
+    Posts.query.filter_by(id = post_id).delete()    
+    db.session.commit()
+    return redirect(f"/users/{post.user.id}")
