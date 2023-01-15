@@ -20,6 +20,20 @@
             <textarea class= "form-control" type="text" name="content" id="content"> </textarea>
         </div>
 </div>
+
+<div class="form-group row">
+    <label for="tags" class="col-sm-2 col-form-label"> tags:</label>
+        <div class="col-sm-10">
+            <!-- <p>For windows: Hold down the control (ctrl) button to select multiple options
+                For Mac: Hold down the command button to select multiple options</p> -->
+            <select name="tags" id="tags" multiple>
+               {% for tag in tags%}
+                <option value={{tag.name}}>{{tag.name}}</option>
+               {%endfor%}
+            </select>
+        </div>
+</div>
+
     <div class="form-group row">
         <div class="ml-auto mr-3">
             <button class="btn btn-outline-primary" formaction="/users/{{user.id}}" formmethod="GET"> Cancel </button>

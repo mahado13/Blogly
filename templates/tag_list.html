@@ -1,0 +1,22 @@
+{%extends 'base.html' %}
+
+{% block title %} All Users List {% endblock %}
+
+{% block content %}
+
+<h1>All Tags:</h1>
+    <ul class="list-group">
+        {% for tag in tags %}
+        <li class="list-group-item"><a href="/tags/{{tag.id}}">{{tag.name}} </a></li>
+        {% endfor %}
+    </ul>
+
+   <form action="/tags/new">
+   <button class="btn btn-outline-success"> Add Tag</button>
+   </form>
+
+   {% for msg in get_flashed_messages() %}
+        <p>{{ msg }}</p>
+   {% endfor %}
+
+{% endblock %}

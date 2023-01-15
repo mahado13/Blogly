@@ -20,13 +20,31 @@
         <div class="form-group row">
             <label for="content" class="col-sm-2 col-form-label"> Content:</label>
             <div class="col-sm-10">
-                <textarea class="form-control" type="text" name="content" id="content"
-                >{{post.content}}</textarea>
+                <textarea class="form-control" type="text" name="content" id="content">{{post.content}}</textarea>
             </div>
         </div>
+
+        <div class="form-group row">
+            <label for="tags" class="col-sm-2 col-form-label"> tags:</label>
+            <div class="col-sm-10">
+                <!-- <p>For windows: Hold down the control (ctrl) button to select multiple options
+                        For Mac: Hold down the command button to select multiple options</p> -->
+                <select name="tags" id="tags" multiple>
+                    {% for tag in tags%}
+                        {% if tag in posttags %}
+                                <option value={{tag.name}} selected>{{tag.name}}</option>
+                             {% else %}
+                                <option value={{tag.name}}>{{tag.name}}</option>
+                        {%endif%}
+                    {%endfor%}
+                </select>
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="ml-auto mr-3">
-                <button class="btn btn-outline-primary" formaction="/posts/{{post.id}}" formmethod="GET"> Cancel </button>
+                <button class="btn btn-outline-primary" formaction="/posts/{{post.id}}" formmethod="GET"> Cancel
+                </button>
                 <button class="btn btn-success" formaction="/posts/{{post.id}}/edit" formmethod="POST"> Edit </button>
             </div>
         </div>

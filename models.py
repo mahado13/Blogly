@@ -40,7 +40,7 @@ class Users(db.Model):
         return f"{self.first_name} {self.last_name}"
     
 class Posts(db.Model):
-    __table__name = 'posts'
+    __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     title = db.Column(db.String(50), nullable = False, unique = True)
@@ -49,6 +49,20 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     user = db.relationship('Users', backref='posts')
+    
+    tags = db.relationship('Tag', secondary='posttags', backref='posts')
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(50), nullable=False, unique = True)
+
+
+class PostTag(db.Model):
+    __tablename__ = 'posttags'
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)     
+
 
 
 

@@ -1,0 +1,27 @@
+{%extends 'base.html' %}
+
+{% block title %} New Posts {% endblock %}
+
+{% block content %}
+<h1>Create a Tag</h1>
+
+<!-- <div class="container"> -->
+<form>
+<div class="form-group row">
+        <label for="tagname" class="col-sm-2 col-form-label"> Name: </label>
+        <div class="col-sm-10">
+            <input class = "form-control" type="text" name="tagname" id="tagname" placeholder="Enter a name for the tag">
+    </div>
+</div>
+    <div class="form-group row">
+        <div class="ml-auto mr-3">
+            <button class="btn btn-outline-primary" formaction="/tags" formmethod="GET"> Cancel </button>
+            <button class="btn btn-success" formaction="/tags/new" formmethod="POST"> Add </button>
+        </div>
+    </div>
+</form>
+<!-- </div> -->
+
+
+
+{% endblock %}

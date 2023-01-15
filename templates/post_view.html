@@ -9,6 +9,8 @@
 <p>{{post.content}}</p>
 <p><i>By {{post.user.get_full_name()}}</i></p>
 
+<ul class="list-inline">Tags: {% for tag in tags%}<li class="list-inline-item ">{{tag.name}}</li>{%endfor%}</ul>
+
 <form>
     <div class="">
         <button class="btn btn-outline-primary" formaction="/users/{{post.user.id}}" formmethod="GET">Cancel</button>

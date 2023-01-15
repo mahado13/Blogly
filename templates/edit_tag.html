@@ -1,0 +1,27 @@
+{%extends 'base.html' %}
+
+{% block title %} New Posts {% endblock %}
+
+{% block content %}
+<h1>Edit a Tag</h1>
+
+<!-- <div class="container"> -->
+<form>
+<div class="form-group row">
+        <label for="tagname" class="col-sm-2 col-form-label"> Name: </label>
+        <div class="col-sm-10">
+            <input class = "form-control" type="text" name="tagname" id="tagname" value = {{tag.name}}>
+    </div>
+</div>
+    <div class="form-group row">
+        <div class="ml-auto mr-3">
+            <button class="btn btn-info" formaction="/tags/{{tag.id}}" formmethod="GET"> Cancel </button>
+            <button class="btn btn-success" formaction="/tags/{{tag.id}}/edit" formmethod="POST"> Edit </button>
+        </div>
+    </div>
+</form>
+<!-- </div> -->
+
+
+
+{% endblock %}
